@@ -1,0 +1,29 @@
+class Solution {
+    public int recur (int index , int amount , int[] coins , int[][] dp) {
+        if (index == 0) {
+            if(amount % coins[index] == 0)
+              return amount / coins[index];
+            else
+              return (int)1e9 + 7;
+        }
+        if(dp[index][amount] != -1)
+           return dp[index][amount];
+        int notTake = recur(index - 1 , amount , coins , dp);
+        int take = Integer.MAX_VALUE;
+        if(amount >= coins[index])
+          take = 1 + recur(index , amount - coins[index] , coins , dp);
+
+        return dp[index][amount] = Math.min(notTake , take);
+    }
+    public int coinChange(int[] coins, int amount) {
+        int n = coins.length;
+        int dp[][] = new int[n][amount + 1];
+        for(int arr[] : dp)
+          Arrays.fill(arr , -1);
+        int ans = recur(n - 1 , amount , coins , dp);
+        if(ans == (int)1e9 + 7)
+          return -1;
+        else
+          return ans;
+    }
+}
